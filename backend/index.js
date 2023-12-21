@@ -2,13 +2,16 @@ const express = require("express");
 require("dotenv").config();
 const cors = require("cors")
 const mongoose = require("mongoose")
+
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const app = express();
-
+const multer = require("multer")
+const uploadMiddleware = multer({dest:"upload/"})
+const fs = require("fs")
 app.use(cors({credentials:true, origin: "http://localhost:5173"}));
 app.use(express.json());
-
+const secret = 'your_secret_key_here'; 
 
 //data
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -60,6 +63,44 @@ app.post("/login", async (req,res)=> {
    }
 
 })
+//log out
+app.post("/logout" ,(req,res) =>{
+    res.cookie("token","").json("ok")
+})
+
+
+
+
+//creat
+app.post("/post",uploadMiddleware.single("file"), async (req,res)=> {
+ const {originname: originalname, path} = req.file;
+ const parts = originalname.split(".");
+ const ext = parts[parts.length - 1 ];
+ const newPath = path + "." + ext;
+ fs.renameSync(path,newPath);
+ const {token} = req.cookies;
+ jwt.verify(token, secret,async (err,info) =>{
+    if(err) throw err;
+    const {title,summary,connect} = req.body;
+    const postDoc = await Post.create({
+        title,
+        summary,
+        connect,
+        cover:newPath,
+        author:info.id,
+    })
+    res.json(postDoc)
+ })
+
+})
+
+
+///get all post
+
+
+
+
+
 
 
 

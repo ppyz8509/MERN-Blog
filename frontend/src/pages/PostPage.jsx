@@ -8,7 +8,7 @@ const PostPage = () => {
             @Naphat
         </h1>
         <time> 12 December 2023 </time>
-        <a href="" className='author'>tossapon</a>
+        <a href="" className='author'>Naphat</a>
         <div className="image">
             <img src="https://thethaiger.com/th/wp-content/uploads/2023/12/%E0%B8%AA%E0%B8%A3%E0%B8%B8%E0%B8%9B%E0%B8%94%E0%B8%A3%E0%B8%B2%E0%B8%A1%E0%B9%88%E0%B8%B2%E0%B9%80%E0%B8%81%E0%B8%A1-The-Day-Before-%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%87%E0%B8%AA%E0%B8%95%E0%B8%B9%E0%B8%94%E0%B8%B4%E0%B9%82%E0%B8%AD-FNTASTIC-%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%81%E0%B8%B2%E0%B8%A8%E0%B8%9B%E0%B8%B4%E0%B8%94%E0%B8%95%E0%B8%B1%E0%B8%A7.png" alt="" />
         </div>
