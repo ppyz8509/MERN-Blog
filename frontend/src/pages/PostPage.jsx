@@ -1,29 +1,61 @@
-import React from 'react'
+import { useState, useContext, useEffect } from "react";
+import { UserContext } from "../context/UserContext";
+import { Link, useParams } from "react-router-dom";
+import { format } from "date-fns";
+const baseURL = import.meta.env.VITE_BASE_URL;
 
 const PostPage = () => {
+  const [postInfo, setPostInfo] = useState(null);
+  const {userInfo} = useContext(UserContext);
+  const { id } = useParams();
+  useEffect(() => {
+    fetch(`${baseURL}/post/${id}`).then((response) => {
+      response.json().then((postInfo) => {
+        setPostInfo(postInfo);
+      });
+    });
+  }, [id]);
+  if (!postInfo) return "";
   return (
-    <div className='post-page'>
-        <h1>
-            {" "}
-            @Naphat
-        </h1>
-        <time> 12 December 2023 </time>
-        <a href="" className='author'>Naphat</a>
-        <div className="image">
-            <img src="https://thethaiger.com/th/wp-content/uploads/2023/12/%E0%B8%AA%E0%B8%A3%E0%B8%B8%E0%B8%9B%E0%B8%94%E0%B8%A3%E0%B8%B2%E0%B8%A1%E0%B9%88%E0%B8%B2%E0%B9%80%E0%B8%81%E0%B8%A1-The-Day-Before-%E0%B8%AB%E0%B8%A5%E0%B8%B1%E0%B8%87%E0%B8%AA%E0%B8%95%E0%B8%B9%E0%B8%94%E0%B8%B4%E0%B9%82%E0%B8%AD-FNTASTIC-%E0%B8%9B%E0%B8%A3%E0%B8%B0%E0%B8%81%E0%B8%B2%E0%B8%A8%E0%B8%9B%E0%B8%B4%E0%B8%94%E0%B8%95%E0%B8%B1%E0%B8%A7.png" alt="" />
+    <div className="post-page">
+      <h1>{postInfo.title}</h1>
+      <time>
+        {format(new Date(postInfo.createdAt), "dd MMMM yyyy HH:MM")}
+      </time>
+      <div className="author">By @{postInfo.author.username}</div>
+      {userInfo?.id == postInfo.author._id && (
+        <div className="edit-row">
+          <Link className="edit-btn" to={`/edit/${postInfo._id}`}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="w-6 h-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+              />
+            </svg>
+            Edit this post
+            <br></br>
+          </Link>
         </div>
-        <p className="context">
-        ทีมสร้าง "The Day Before" ปิดสตูดิโอหนี ปล่อยผู้เล่นยืนงงในดงผี!<br></br>
-        เรียกว่าเป็นไปตามคาด สำหรับ The Day Before วิดีโอเกมแนวชูตติ้งสยองขวัญเอาชีวิตรอดเน้นเล่นออนไลน์หลายคน 
-        ที่ถูกสร้างโดยทีมงาน Fntastic และเผยแพร่โดยค่าย Mytona ซึ่งก่อนหน้าเคยเผชิญดราม่าจากปัญหาการพัฒนาเกมที่ยืดยาวกินเวลานานผิดสังเกต
-        จนถูกสังคมตั้งคำถามและวิพากษ์วิจารณ์ไปต่างๆนานาว่านี่อาจเข้าข่ายเป็นการต้มตุ๋นหลอกลวงตั้งแต่ตัวเกมยังไม่ทันวางจำหน่าย
-        และแล้วทุกสิ่งที่แฟนๆเคลือบแคลงสงสัยก็เริ่มออกลายชัดเจนมากยิ่งขึ้น เมื่อตัวเกม The Day Before ได้ฤกษ์เปิดช่วง Early Access ให้ผู้เล่นชาวสตีมได้ลิ้มลองสัมผัสมันก่อนใครล่วงหน้าในวันที่ 7 ธันวาคมที่ผ่านมา 
-        พร้อมกับเสียงตอบรับที่ย่ำแย่ค่อนไปทางแง่ลบเป็นส่วนใหญ่ถึงความไม่สมบูรณ์ของระบบเกมเพลย์จนน่าตกใจ ทั้งอาการกระตุก หลุดบ่อย ของหาย และบัคอื่นๆอีกมากมายก่ายกอง
-        ซึ่งแทนที่ทีมงานจะตั้งหน้าตั้งตาปล่อยแพทช์ปรับปรุงแก้ไขตัวเกมให้ดีขึ้นเหมือนเช่นนักพัฒนารายอื่นๆ ตรงกันข้ามทาง Fntastic กลับเลือกที่จะตัดช่องน้อยแต่พอตัวด้วยการรีบชิงประกาศปิดสตูดิโอของพวกเขาเองไปเสียเลย 
-        ณ บัดนี้ โดยอ้างเหตุผลว่ามันเกิดจากปัญหาด้านการเงินภายในของบริษัท
-        </p>
-    </div>
-  )
-}
+      )}
+ <br></br>
+      <div className="image">
+        <img src={`${baseURL}/${postInfo.cover}`} alt="" />
+      </div>
+      <div 
+      className=" content"
+      dangerouslySetInnerHTML={{__html: postInfo.content}}>
 
-export default PostPage
+      </div>
+    </div>
+  );
+};
+
+export default PostPage;
