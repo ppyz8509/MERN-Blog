@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import {useState} from 'react'
 import Editor from '../components/Editor'
-const baseURL = import.meta.env.VITE_BASE_URL;
-import {Navigate} from "react-router-dom";
-
+const baseURL = import.meta.env.VITE_BASE_URL
+import { Navigate } from 'react-router-dom'
 
 const CreatePage = () => {
   const [title, setTitle] = useState("");
